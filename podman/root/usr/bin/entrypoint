@@ -113,4 +113,4 @@ check_owner /data/ssh
 # ----------------------------
 # Execute runtime (runit or override command)
 # ----------------------------
-exec "$@"
+exec su-exec ${USER} "$@"
