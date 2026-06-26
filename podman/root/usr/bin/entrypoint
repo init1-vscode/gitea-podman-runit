@@ -10,6 +10,35 @@ USER="git"
 : "${USER_GID:?USER_GID must be set}"
 
 # ----------------------------
+# Verify required writable mounts
+# ----------------------------
+check_writable() {
+    path="$1"
+    testfile="$path/.entrypoint-write-test.$$"
+
+    if [ ! -d "$path" ]; then
+        echo "ERROR: required directory missing: $path" >&2
+        exit 1
+    fi
+
+    if ! : >"$testfile" 2>/dev/null; then
+        echo "ERROR: required writable mount is not writable: $path" >&2
+        exit 1
+    fi
+
+    rm -f "$testfile"
+}
+
+for dir in \
+    /etc \
+    /run \
+    /tmp \
+    /service/supervise
+do
+    check_writable "$dir"
+done
+
+# ----------------------------
 # Current container values
 # ----------------------------
 CURRENT_UID="$(id -u "$USER")"
