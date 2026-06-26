@@ -82,6 +82,7 @@ done
 # Clone /service to /run for exec
 # ----------------------------
 cp -a /service/. /run/service/
+chown -R ${USER}:${USER} /run/service
 
 # ----------------------------
 # Permission validation
