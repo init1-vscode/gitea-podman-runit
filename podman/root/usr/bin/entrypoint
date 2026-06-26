@@ -1,0 +1,82 @@
+#!/bin/sh
+set -eu
+
+USER="git"
+
+# ----------------------------
+# Required env
+# ----------------------------
+: "${USER_UID:?USER_UID must be set}"
+: "${USER_GID:?USER_GID must be set}"
+
+# ----------------------------
+# Current container values
+# ----------------------------
+CURRENT_UID="$(id -u "$USER")"
+CURRENT_GID="$(id -g "$USER")"
+
+# ----------------------------
+# Update /etc/group
+# ----------------------------
+if [ "$USER_GID" != "$CURRENT_GID" ]; then
+    sed -i \
+        -e "s/^${USER}:\([^:]*\):[0-9]*/${USER}:\1:${USER_GID}/" \
+        /etc/group
+
+    sed -i \
+        -e "s/^${USER}:\([^:]*\):\([0-9]*\):[0-9]*/${USER}:\1:\2:${USER_GID}/" \
+        /etc/passwd
+fi
+
+# ----------------------------
+# Update /etc/passwd
+# ----------------------------
+if [ "$USER_UID" != "$CURRENT_UID" ]; then
+    sed -i \
+        -e "s/^${USER}:\([^:]*\):[0-9]*:\([0-9]*\)/${USER}:\1:${USER_UID}:\2/" \
+        /etc/passwd
+fi
+
+# ----------------------------
+# Ensure runtime directories
+# ----------------------------
+for dir in \
+    /data/gitea/conf \
+    /data/gitea/log \
+    /data/git \
+    /data/ssh
+do
+    mkdir -p "$dir"
+done
+
+# ----------------------------
+# Permission validation
+# ----------------------------
+
+check_owner() {
+    path="$1"
+
+    if [ ! -e "$path" ]; then
+        echo "ERROR: required path missing: $path" >&2
+        exit 1
+    fi
+
+    owner_uid="$(stat -c %u "$path")"
+    owner_gid="$(stat -c %g "$path")"
+
+    if [ "$owner_uid" != "$USER_UID" ] || [ "$owner_gid" != "$USER_GID" ]; then
+        echo "ERROR: incorrect ownership on $path"
+        echo "       expected: ${USER_UID}:${USER_GID}"
+        echo "       found:    ${owner_uid}:${owner_gid}"
+        exit 1
+    fi
+}
+
+check_owner /data/git
+check_owner /data/gitea
+check_owner /data/ssh
+
+# ----------------------------
+# Execute runtime (runit or override command)
+# ----------------------------
+exec "$@"
