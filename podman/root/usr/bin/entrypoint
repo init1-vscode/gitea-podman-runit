@@ -33,7 +33,6 @@ for dir in \
     /etc \
     /run \
     /tmp \
-    /service/supervise
 do
     check_writable "$dir"
 done
