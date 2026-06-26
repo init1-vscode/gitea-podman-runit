@@ -32,7 +32,7 @@ check_writable() {
 for dir in \
     /etc \
     /run \
-    /tmp \
+    /tmp
 do
     check_writable "$dir"
 done
@@ -72,7 +72,7 @@ for dir in \
     /data/gitea/conf \
     /data/gitea/log \
     /data/git \
-    /data/ssh
+    /data/ssh \
     /run/service
 do
     mkdir -p "$dir"
