@@ -74,9 +74,15 @@ for dir in \
     /data/gitea/log \
     /data/git \
     /data/ssh
+    /run/service
 do
     mkdir -p "$dir"
 done
+
+# ----------------------------
+# Clone /service to /run for exec
+# ----------------------------
+cp -a /service/. /run/service/
 
 # ----------------------------
 # Permission validation
