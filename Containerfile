@@ -95,9 +95,10 @@ RUN addgroup \
 COPY --from=build-env /tmp/local /
 COPY --from=build-env /go/src/gitea.dev/gitea /app/gitea/gitea
 
-RUN chmod 755 \
-        /bin/* \
-        /usr/bin/*
+RUN chmod -R 755 \
+        /bin \
+        /usr/bin \
+        /var/lib
 
 ENV USER=git
 ENV GITEA_CUSTOM=/data/gitea
