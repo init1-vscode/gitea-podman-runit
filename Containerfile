@@ -77,7 +77,7 @@ RUN apk --no-cache add \
     su-exec \
     gnupg
 
-RUN chmod 755 /usr/sbin/runsv*
+RUN chmod 755 /usr/local/bin/gitea
 
 RUN addgroup \
         -S \
