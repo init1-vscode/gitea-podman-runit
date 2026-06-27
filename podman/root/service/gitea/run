@@ -1,2 +1,2 @@
 #!/bin/sh
-exec chpst -u git:git /usr/local/bin/gitea web --config /data/gitea/conf/app.ini
+exec chpst -u git:git /usr/local/bin/gitea web --config /etc/gitea/app.ini
