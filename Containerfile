@@ -99,6 +99,8 @@ RUN chmod -R 755 \
         /bin \
         /usr/bin \
         /var/lib
+RUN find /usr/lib -type f -name "*.so*" -exec chmod 644 {} \;
+RUN find /lib -type f -name "*.so*" -exec chmod 644 {} \;
 
 ENV USER=git
 ENV GITEA_CUSTOM=/data/gitea
