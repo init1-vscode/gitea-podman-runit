@@ -84,7 +84,6 @@ done
 # Clone /service to /run for exec
 # ----------------------------
 cp -a /service/. /run/service/
-chown -R ${USER}:${USER} /run/service
 
 # ----------------------------
 # Permission validation
@@ -116,4 +115,4 @@ check_owner /data/ssh
 # ----------------------------
 # Execute runtime (runit or override command)
 # ----------------------------
-exec su-exec ${USER} "$@"
+exec "$@"

@@ -106,4 +106,4 @@ VOLUME ["/data"]
 
 ENTRYPOINT ["/usr/bin/entrypoint"]
 
-CMD ["/usr/sbin/runsvdir", "-P", "/run/service"]
+CMD ["runsvdir", "-P", "/run/service"]
