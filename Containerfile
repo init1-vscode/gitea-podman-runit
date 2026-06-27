@@ -54,8 +54,6 @@ COPY podman/root /tmp/local
 RUN chmod 755 \
         /tmp/local/usr/bin/entrypoint \
         /tmp/local/usr/local/bin/* \
-        /tmp/local/usr/bin/* \
-        /tmp/local/bin/* \
         /tmp/local/service/gitea/run \
         /tmp/local/service/openssh/run \
         /go/src/gitea.dev/gitea
@@ -96,6 +94,10 @@ RUN addgroup \
 
 COPY --from=build-env /tmp/local /
 COPY --from=build-env /go/src/gitea.dev/gitea /app/gitea/gitea
+
+RUN chmod 755 \
+        /bin/* \
+        /usr/bin/*
 
 ENV USER=git
 ENV GITEA_CUSTOM=/data/gitea
