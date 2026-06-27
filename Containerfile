@@ -95,12 +95,10 @@ RUN addgroup \
 COPY --from=build-env /tmp/local /
 COPY --from=build-env /go/src/gitea.dev/gitea /app/gitea/gitea
 
-RUN chmod -R 755 \
-        /bin \
-        /usr/bin \
-        /var/lib
-RUN find /usr/lib -type f -name "*.so*" -exec chmod 644 {} \;
+RUN find /bin -type f -exec chmod 755 {} \;
+RUN find /usr/bin -type f -exec chmod 755 {} \;
 RUN find /lib -type f -name "*.so*" -exec chmod 644 {} \;
+RUN find /usr/lib -type f -name "*.so*" -exec chmod 644 {} \;
 
 ENV USER=git
 ENV GITEA_CUSTOM=/data/gitea
