@@ -101,6 +101,7 @@ RUN find /usr/lib /lib -type d -exec chmod 755 {} \;
 RUN find /usr/lib /lib -type f -exec chmod 755 {} \;
 
 ENV USER=git
+ENV HOME=/data/git
 ENV GITEA_CUSTOM=/data/gitea
 
 VOLUME ["/data"]

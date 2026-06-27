@@ -110,7 +110,7 @@ check_owner() {
 
 check_owner /data/git
 check_owner /data/gitea
-check_owner /data/ssh
+#check_owner /data/ssh
 
 # ----------------------------
 # Execute runtime (runit or override command)
