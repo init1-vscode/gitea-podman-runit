@@ -91,6 +91,8 @@ cp -a /service/. /run/service/
 
 check_owner() {
     path="$1"
+    expected_uid="$2"
+    expected_gid="$3"
 
     if [ ! -e "$path" ]; then
         echo "ERROR: required path missing: $path" >&2
@@ -100,19 +102,21 @@ check_owner() {
     owner_uid="$(stat -c %u "$path")"
     owner_gid="$(stat -c %g "$path")"
 
-    if [ "$owner_uid" != "$USER_UID" ] || [ "$owner_gid" != "$USER_GID" ]; then
+    if [ "$owner_uid" != "$expected_uid" ] || [ "$owner_gid" != "$expected_gid" ]; then
         echo "ERROR: incorrect ownership on $path"
-        echo "       expected: ${USER_UID}:${USER_GID}"
+        echo "       expected: ${expected_uid}:${expected_gid}"
         echo "       found:    ${owner_uid}:${owner_gid}"
         exit 1
     fi
 }
 
-check_owner /data/git
-check_owner /data/gitea
-#check_owner /data/ssh
+check_owner /data "$USER_UID" "$USER_GID"
+check_owner /data/git "$USER_UID" "$USER_GID"
+check_owner /data/gitea "$USER_UID" "$USER_GID"
+check_owner /data/ssh 0 0
 
 # ----------------------------
 # Execute runtime (runit or override command)
 # ----------------------------
 exec "$@"
+
