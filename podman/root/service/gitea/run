@@ -1,2 +1,5 @@
 #!/bin/sh
+
+# Force the baseline container path variable back into the service block
+export PATH="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
 exec chpst -u git:git /usr/local/bin/gitea web
